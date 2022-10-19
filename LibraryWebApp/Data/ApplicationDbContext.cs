@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using BibliotekaWeb.Models;
+using LibraryWeb.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryWebApp.Data
@@ -9,5 +11,11 @@ namespace LibraryWebApp.Data
             : base(options)
         {
         }
+        public DbSet<Book> Books { get; set; }
+
+        public DbSet<Reservation> Reservations { get; set; }
+
+
+
     }
 }

@@ -1,6 +1,10 @@
+using LibraryWeb;
+//using LibraryWeb.Data;
 using LibraryWebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static System.Formats.Asn1.AsnWriter;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +17,14 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<BooksSeeder>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//Configure the HTTP request pipeline.
+var scope = app.Services.CreateScope();
+
+var seeder = scope.ServiceProvider.GetRequiredService<BooksSeeder>();
+seeder.Seed();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
