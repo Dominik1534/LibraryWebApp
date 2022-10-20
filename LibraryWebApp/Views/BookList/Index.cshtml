@@ -57,9 +57,18 @@
                     @item.Describe
                 </td>
                 <td>
-                    <a asp-controller="BookList" asp-action="Add New Book" class="btn btn-primary">
-                        Book
-                    </a>
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-controller="BookList" asp-action="EditBook" asp-route-id="@item.bookID" class="btn btn-primary">
+                            Edit
+                        </a>
+                        <a asp-controller="BookList" asp-action="Book" asp-route-id="@item.bookID" class="btn btn-primary">
+                            Book
+                        </a>
+                        <a asp-controller="BookList" asp-action="DeleteBook" asp-route-id="@item.bookID" class="btn btn-danger">
+                            Delete
+                        </a>
+                    </div>
+
                 </td>
             </tr>
         }

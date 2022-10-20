@@ -44,7 +44,7 @@ namespace LibraryWebApp.Data.Migrations
 
                     b.HasKey("bookID");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("LibraryWeb.Models.Reservation", b =>
@@ -66,7 +66,7 @@ namespace LibraryWebApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

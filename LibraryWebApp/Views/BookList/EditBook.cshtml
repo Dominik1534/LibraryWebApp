@@ -1,9 +1,14 @@
 ﻿@using BibliotekaWeb.Models
 @model Book
-<form method="post">
+<form method="post" asp-action="EditBook">
     <div class="border pt-3 mt-4">
         <div class="row pb-2">
-            <h2 class="text-primary">Add New Book</h2>
+            <h2 class="text-primary">Edit Book</h2>
+        </div>
+        <div class="mb-3">         
+            <label asp-for="bookID" class="form-label" for="readOnlyInput"></label>
+            <input asp-for="bookID" class="form-control" id="readOnlyInput" type="text" readonly="">
+            <span asp-validation-for="bookID" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Name"></label>
@@ -29,17 +34,12 @@
 
 
         </div>
-        <button type="submit" class="btn btn-primary" style="width:150px">Add</button>
+        <button type="submit" class="btn btn-primary" style="width:150px">Update</button>
         <a asp-controller="BookList" asp-action="Index" class="btn btn-secondary" style="width:150px">
             Back to List
         </a>
     </div>
 </form>
-@section Scripts
-{
-    @{
-        <partial name="_ValidationScriptsPartial" />
-    }
-}
+
 
 
