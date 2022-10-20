@@ -1,10 +1,20 @@
 ﻿using BibliotekaWeb.Models;
+using LibraryWeb.Models;
 using LibraryWebApp.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
+using System.Net;
+using System.Security.Claims;
+
 
 namespace LibraryWebApp.Controllers
 {
+    [Authorize]
     public class BookListController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -13,10 +23,16 @@ namespace LibraryWebApp.Controllers
         {
             _dbContext = dbContext;
         }
+        [AllowAnonymous]
         //Get
+       
         public IActionResult Index()
         {
-            IEnumerable<Book> booksList = _dbContext.Books;
+            IEnumerable<Book> booksList = _dbContext.Books
+                .Skip(20 *(2 -1))
+                .Take(20)
+
+;
             return View(booksList);
         }
         //Get
@@ -45,6 +61,9 @@ namespace LibraryWebApp.Controllers
         //Get
         public IActionResult EditBook(int? id)
         {
+            
+            //var clasimsIdentity = User.Identity.Name;
+            //ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             if (id==null )
             {
                 return NotFound();
@@ -105,6 +124,42 @@ namespace LibraryWebApp.Controllers
                 return RedirectToAction("Index");
             
         }
+        //Get
+        public IActionResult Book(int? id)
+        {
+            var clasimsIdentity = User.Identity.Name;
 
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var bookFromDb = _dbContext.Books.Find(id);
+            Reservation reservation = new Reservation();
+            reservation.BookId = bookFromDb.bookID;
+            reservation.UserId = clasimsIdentity;
+            var user = _dbContext.Users;
+            if (bookFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(reservation);
+        }
+        //Post
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Book(Reservation reservation)
+        {
+            if (reservation == null)
+            {
+                return NotFound();
+            }           
+            _dbContext.Reservations.Add(reservation);
+            _dbContext.SaveChanges();
+
+            TempData["success"] = "Reservation created successfully";
+
+            return RedirectToAction("Index");
+
+        }
     }
 }
