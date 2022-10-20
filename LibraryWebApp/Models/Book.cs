@@ -7,7 +7,7 @@ namespace BibliotekaWeb.Models
     public class Book
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int bookID { get; set; }
         [Required]
         public string Name { get; set; }

@@ -1,0 +1,38 @@
+﻿@using BibliotekaWeb.Models
+@model Book
+<form method="post">
+    <div class="border pt-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Add New Book</h2>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Author"></label>
+            <input asp-for="Author" class="form-control">
+            <span asp-validation-for="Author" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3">
+            <label asp-for="PublishDate"></label>
+            <input asp-for="PublishDate" class="form-control">
+            <span asp-validation-for="PublishDate" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3">
+            <label asp-for="Describe" class="form-label mt-4"></label>
+            <textarea class="form-control" id="exampleTextarea" rows="3" input asp-for="Describe"></textarea>
+            <span asp-validation-for="Describe" class="text-danger"></span>
+
+
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:150px">Add</button>
+        <a asp-controller="BookList" asp-action="Index" class="btn btn-secondary" style="width:150px">
+            Back to List
+        </a>
+    </div>
+</form>
+

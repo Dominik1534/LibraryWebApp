@@ -1,0 +1,67 @@
+﻿@using BibliotekaWeb.Models
+@model IEnumerable<Book> 
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Book List</h2>
+       </div>
+       <div class="col-6 text-end">
+           <a asp-controller="BookList" asp-action="AddNewBook" class="btn btn-primary">
+               Add New Book
+           </a>
+       </div>
+    </div>
+</div>
+<br />
+
+
+<table class="table table-bordered table-striped"style="width:100%">
+    <thead>
+        <tr class="table-primary">
+            <th scope="col">
+                Book Name
+            </th>
+            <th>
+                Author Name
+            </th>
+            <th>
+                Publish Date 
+            </th>
+            <th>
+                Describe
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr scope="row">
+                <td >
+                    @item.Name
+                </td>
+                <td >
+                    @item.Author
+                </td>
+                <td >
+                    @item.PublishDate.Year
+                </td>
+                <td >
+                    @item.Describe
+                </td>
+                <td>
+                    <a asp-controller="BookList" asp-action="Add New Book" class="btn btn-primary">
+                        Book
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
