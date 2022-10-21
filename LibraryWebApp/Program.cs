@@ -18,7 +18,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<BooksSeeder>();
-//builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddAuthentication();   
+   
 var app = builder.Build();
 
 //Configure the HTTP request pipeline.

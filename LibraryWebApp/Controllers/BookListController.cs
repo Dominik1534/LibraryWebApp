@@ -215,7 +215,19 @@ namespace LibraryWebApp.Controllers
             if (reservation == null)
             {
                 return NotFound();
-            }           
+            }
+            var userReserwations = _dbContext.Reservations;
+            foreach (var item in userReserwations)
+            {
+                if (reservation.BookId == item.BookId)
+                {
+                    TempData["bookerror"] = "Book arledy reserved !";
+                    return RedirectToAction("Index");
+
+                }
+            }
+            
+            reservation.Id=_dbContext.Reservations.Count()+1;
             _dbContext.Reservations.Add(reservation);
             _dbContext.SaveChanges();
 
