@@ -1,6 +1,8 @@
 ﻿using BibliotekaWeb.Models;
+using ContosoUniversity;
 using LibraryWeb.Models;
 using LibraryWebApp.Data;
+using LibraryWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,17 +25,80 @@ namespace LibraryWebApp.Controllers
         {
             _dbContext = dbContext;
         }
-        [AllowAnonymous]
-        //Get
-       
-        public IActionResult Index()
-        {
-            IEnumerable<Book> booksList = _dbContext.Books
-                .Skip(20 *(2 -1))
-                .Take(20)
+        //        [AllowAnonymous]
+        //        //Get
 
-;
-            return View(booksList);
+        //        public IActionResult Index()
+        //        {
+        //            IEnumerable<Book> booksList = _dbContext.Books              
+        //                .Take(20)
+
+        //;
+        //            return View(booksList);
+        //        }
+        //        [AllowAnonymous]
+
+        //        public IActionResult Index(PageInfo page)
+        //        {
+        //            if (page.PageLength == 0)
+        //            {
+        //                page.PageLength = 20;
+        //            }
+        //            IEnumerable<Book> booksList = _dbContext.Books
+        //                .Skip(page.PageLength * (page.PageNumber - 1))
+        //                .Take(page.PageLength)
+
+        //;
+        //            return View(booksList);
+        //        }
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(
+        string sortOrder,
+        string currentFilter,
+        string searchString,
+        int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["AuthorSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Author_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            var books = from s in _dbContext.Books
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Name.Contains(searchString)
+                                       || s.Author.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    books = books.OrderByDescending(s => s.Name);
+                    break;
+                case "Author_desc":
+                    books = books.OrderByDescending(s => s.Author);
+                    break;
+                case "Date":
+                    books = books.OrderBy(s => s.PublishDate);
+                    break;
+                case "date_desc":
+                    books = books.OrderByDescending(s => s.PublishDate);
+                    break;
+                default:
+                    books = books.OrderBy(s => s.Author);
+                    break;
+            }
+            int pageSize = 20;
+            return View(await PaginatedList<Book>.CreateAsync(books.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
         //Get
         public IActionResult AddNewBook()
@@ -62,8 +127,6 @@ namespace LibraryWebApp.Controllers
         public IActionResult EditBook(int? id)
         {
             
-            //var clasimsIdentity = User.Identity.Name;
-            //ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             if (id==null )
             {
                 return NotFound();

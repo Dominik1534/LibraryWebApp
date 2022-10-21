@@ -1,6 +1,7 @@
 ﻿@using BibliotekaWeb.Models
+@using ContosoUniversity
 
-@model IEnumerable<Book> 
+@model PaginatedList<Book>
 @{
     ViewData["Title"] = "Index";
 }
@@ -25,13 +26,16 @@
     <thead>
         <tr class="table-primary">
             <th scope="col">
-                Book Name
+               
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]"> Book Name</a>
             </th>
             <th>
-                Author Name
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Author Name</a>
+                
             </th>
             <th>
-                Publish Date 
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Publish Date</a>
+                
             </th>
             <th>
                 Describe
@@ -75,3 +79,22 @@
         }
     </tbody>
 </table>
+<@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

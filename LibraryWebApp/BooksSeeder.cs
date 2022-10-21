@@ -8,6 +8,7 @@ using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using LibraryWebApp.Data;
+using System.Net;
 
 namespace LibraryWeb
 {
@@ -19,14 +20,26 @@ namespace LibraryWeb
             _dbContext = dbContext;
         }
         public void Seed()
-        {           
+        {
+            //GetCSV("https://magazyn2022.blob.core.windows.net/newcontainer/books.csv");
             if (!_dbContext.Books.Any())
             {
                 var recipes = GetBooksFromCSV();
-          
+
                 _dbContext.Books.AddRange(recipes);
                 _dbContext.SaveChanges();
             }
+        }
+        public string GetCSV(string url)
+        {
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+
+            StreamReader sr = new StreamReader(resp.GetResponseStream());
+            string results = sr.ReadToEnd();
+            sr.Close();
+
+            return results;
         }
         private IEnumerable<Book> GetBooksFromCSV()
         {

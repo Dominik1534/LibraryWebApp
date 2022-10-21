@@ -34,8 +34,8 @@
                         
                         
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="text" placeholder="Search">
+                    <form class="d-flex" asp-action="Index" method="get">
+                        <input class="form-control me-sm-2" type="text" placeholder="Search" name="SearchString" value="@ViewData["CurrentFilter"]">
                         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <partial name="_LoginPartial" />
