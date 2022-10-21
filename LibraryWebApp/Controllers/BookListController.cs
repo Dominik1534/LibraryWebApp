@@ -226,8 +226,11 @@ namespace LibraryWebApp.Controllers
 
                 }
             }
-            
-            reservation.Id=_dbContext.Reservations.Count()+1;
+            if (_dbContext.Reservations.Count()==0)
+            {
+                reservation.Id = 1;
+            }
+            reservation.Id=_dbContext.Reservations.Max(r=>r.Id)+1;
             _dbContext.Reservations.Add(reservation);
             _dbContext.SaveChanges();
 
